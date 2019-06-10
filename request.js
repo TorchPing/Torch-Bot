@@ -1,9 +1,12 @@
 const servers = require('./serverList.json')
 const axios = require('axios')
+const client = axios.create({
+  timeout: 10000,
+});
 
 module.exports = {
     getResult(server, location, port) {
-        return axios.get(`${server.address}/${location}/${port}`).then(res => {
+        return client.get(`${server.address}/${location}/${port}`).then(res => {
             let {time, status} = res.data
             time = parseFloat(time).toFixed(2)
             return {

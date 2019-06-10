@@ -120,7 +120,6 @@ bot.command(`ls@${botName}`, lsServer)
 bot.command('ping', ping)
 bot.command(`ping@${botName}`, ping)
 
-bot.launch()
 /* AWS Lambda handler function */
 exports.handler = (event, context, callback) => {
   const tmp = JSON.parse(event.body); // get data passed to us
