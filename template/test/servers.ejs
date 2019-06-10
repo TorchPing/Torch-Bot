@@ -1,0 +1,8 @@
+<%- include('header', {location, port}) %>
+<% servers.forEach((server, index) => { %>
+<%- include('server', {server, index, status: server.status, legancy: server.legancy}) %><% }) %>
+<% const percent = ((servers.filter((obj) => obj.status !== undefined).length / servers.length) * 100 ).toFixed(0) %>
+<%= `\`[`%><%= '#'.repeat((percent / 10).toFixed(0)) %><%= ' '.repeat(10 - (percent / 10).toFixed(0)) %><%= `]\``%><%= percent %>%
+<% if (percent == 100) { %><% const ret = (servers.filter((obj) => obj.status !== null)).length %><% const suc = (servers.filter((obj) => obj.status === true)).length %>
+总共有 <%= ret %> 个节点返回了结果，<%= suc %> 认为可联通，占比 <%= (( suc / ret ) * 100).toFixed(2) %>%
+<% } %>

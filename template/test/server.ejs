@@ -1,0 +1,8 @@
+<%- include('../ls/server', {server, index}) %>
+---
+状态：<% if (locals.status === undefined) { %>等待返回……
+<% } else if (status === null) { %>错误
+<% } else if (status === true) { %>可联通
+延迟：<%= legancy %> 
+<% } else { %>无法联通
+<% } %>
