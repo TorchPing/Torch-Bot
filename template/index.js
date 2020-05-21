@@ -1,21 +1,20 @@
-const servers = require('../serverList')
-
 const ejs = require('ejs')
+const path = require('path')
 
 module.exports = {
     lsServer (server, i) {
-        return ejs.renderFile('template/ls/server.ejs', {
+        return ejs.renderFile(path.resolve(__dirname, 'ls/server.ejs'), {
             server, 
             i
         })
     },
-    lsAll () {
-        return ejs.renderFile('template/ls/servers.ejs',{
+    lsAll (servers) {
+        return ejs.renderFile(path.resolve(__dirname, 'ls/servers.ejs'),{
             servers
         })
     },
     testOne({ server, index, status = undefined, legancy = 0, location, port}) {
-        return ejs.renderFile('template/test/singleServer.ejs', {
+        return ejs.renderFile(path.resolve(__dirname, 'test/singleServer.ejs'), {
             server,
             index,
             status,
@@ -25,7 +24,7 @@ module.exports = {
         })
     },
     testMultiple({ servers, location, port }) {
-        return ejs.renderFile('template/test/servers.ejs', {
+        return ejs.renderFile(path.resolve(__dirname, 'test/servers.ejs'), {
             servers,
             location, 
             port

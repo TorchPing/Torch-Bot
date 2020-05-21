@@ -1,3 +1,8 @@
+if (!process.env.BOT_TOKEN) {
+    const path = require('path')
+    const envpath = path.resolve(__dirname, '.env')
+    require('dotenv').config({ path: envpath })
+}
 const Telegraf = require('telegraf')
 const commandParts = require('telegraf-command-parts')
 
@@ -7,13 +12,12 @@ const bot = new Telegraf(process.env.BOT_TOKEN)
 //ctx.state.command
 bot.use(commandParts())
 
-
 const template = require('./template/index')
-const req = require('./request')
-const servers = require('./serverList')
+const req = require('./lib/request')
+let servers = {}
 
 const lsServer = (ctx) => {
-    template.lsAll().then((res) => {
+    template.lsAll(servers).then((res) => {
         ctx.telegram.sendMessage(ctx.message.chat.id, res, {
             reply_to_message_id: ctx.message.message_id,
             parse_mode: 'markdown'
@@ -40,7 +44,7 @@ const ping = (ctx) => {
     const args = ctx.state.command.splitArgs
     if (args.length === 3) {
         const index = parseInt(args[2])
-        const server = req.selectServer(index)
+        const server = req.selectServer(index, servers)
         if (server) {
             const location = args[0]
             const port = parseInt(args[1])
@@ -120,12 +124,9 @@ bot.command(`ls@${botName}`, lsServer)
 bot.command('ping', ping)
 bot.command(`ping@${botName}`, ping)
 
-/* AWS Lambda handler function */
-exports.handler = (event, context, callback) => {
-  const tmp = JSON.parse(event.body); // get data passed to us
-  bot.handleUpdate(tmp); // make Telegraf process that data
-  return callback(null, { // return something for webhook, so it doesn't try to send same stuff again
-    statusCode: 200,
-    body: '',
-  });
-};
+module.exports = async () => {
+   servers =  await req.getServerList().catch(err => {
+            throw new Error("List Not found")
+    })
+    return bot
+}
