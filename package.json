@@ -3,7 +3,7 @@
     "build": "rm release.zip && zip -r release.zip . -x '*.git*'  -x '*node_modules*'"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "ejs": "^2.6.1",
     "telegraf": "^3.30.1",
